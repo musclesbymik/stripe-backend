@@ -1,3 +1,14 @@
+# Node modules
+node_modules/
+
+# Environment variables
 .env
-node_modules
-STRIPE_SECRET_KEY=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
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS / Editor stuff
+.DS_Store
+.vscode/
