@@ -1,0 +1,17 @@
+{
+  "name": "stripe-project",
+  "version": "1.0.0",
+  "description": "A simple Node.js Stripe integration",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "stripe": "^8.174.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
