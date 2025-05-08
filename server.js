@@ -1,4 +1,5 @@
 require('dotenv').config(); // Load environment variables from .env
+console.log('STRIPE_SECRET_KEY:', process.env.STRIPE_SECRET_KEY);
 const express = require('express');
 const path = require('path');
 const Stripe = require('stripe');
