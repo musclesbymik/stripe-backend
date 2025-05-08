@@ -1,15 +1,18 @@
-require('dotenv').config(); // <-- Load environment variables
-
+// Required dependencies
 const express = require('express');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // <-- Use your Stripe secret key
 const path = require('path');
+const dotenv = require('dotenv');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
+// Load environment variables
+dotenv.config();
+
+// Set up express app
 const app = express();
+app.use(express.json()); // Middleware to parse JSON requests
+app.use(express.static('public')); // Serve static files (like success.html, cancel.html)
 
-app.use(express.json()); // Parse JSON from frontend
-app.use(express.static('public')); // Serve static files
-
-// POST request to create checkout session based on selected plan
+// Create checkout session route
 app.post('/create-checkout-session', async (req, res) => {
   const { priceId } = req.body;
 
@@ -34,18 +37,19 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
-// Success page
+// Success and Cancel pages
 app.get('/success', (req, res) => {
-  res.sendFile(path.join(__dirname, 'success.html'));
+  res.sendFile(path.join(__dirname, 'public', 'success.html'));
 });
 
-// Cancel page
 app.get('/cancel', (req, res) => {
-  res.sendFile(path.join(__dirname, 'cancel.html'));
+  res.sendFile(path.join(__dirname, 'public', 'cancel.html'));
 });
 
+// Listen on defined port (use environment variable or default to 3000)
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
 
