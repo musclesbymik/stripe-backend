@@ -1,15 +1,17 @@
-require('dotenv').config();
+require('dotenv').config(); // <-- Load environment variables
+
 const express = require('express');
-const app = express();
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // <-- Use your Stripe secret key
 const path = require('path');
 
-app.use(express.json());
-app.use(express.static('public'));
+const app = express();
+
+app.use(express.json()); // Parse JSON from frontend
+app.use(express.static('public')); // Serve static files
 
 // POST request to create checkout session based on selected plan
 app.post('/create-checkout-session', async (req, res) => {
-  const { priceId } = req.body; // get priceId from frontend
+  const { priceId } = req.body;
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -32,10 +34,12 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
+// Success page
 app.get('/success', (req, res) => {
   res.sendFile(path.join(__dirname, 'success.html'));
 });
 
+// Cancel page
 app.get('/cancel', (req, res) => {
   res.sendFile(path.join(__dirname, 'cancel.html'));
 });
@@ -44,3 +48,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
