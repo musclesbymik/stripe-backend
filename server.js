@@ -1,9 +1,14 @@
 require('dotenv').config(); // Load environment variables from .env
+
+// Log the Stripe secret key to confirm it's loaded correctly
 console.log('STRIPE_SECRET_KEY:', process.env.STRIPE_SECRET_KEY);
+
+// Import required modules
 const express = require('express');
 const path = require('path');
 const Stripe = require('stripe');
 
+// Initialize the app and Stripe with the secret key
 const app = express();
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -21,6 +26,10 @@ app.get('/', (req, res) => {
 // Route to create a Stripe Checkout session
 app.post('/create-checkout-session', async (req, res) => {
   const { priceId } = req.body;
+  
+  if (!priceId) {
+    return res.status(400).json({ error: 'priceId is required' });
+  }
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -38,6 +47,7 @@ app.post('/create-checkout-session', async (req, res) => {
     // Respond with the session ID to redirect the user to Stripe Checkout
     res.json({ id: session.id });
   } catch (err) {
+    console.error('Error creating checkout session:', err);
     res.status(500).json({ error: err.message });
   }
 });
