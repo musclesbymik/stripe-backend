@@ -839,7 +839,12 @@ height: 30px;
 <p><br />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"></p>
 <title></title>
-<link href="styles.css" rel="stylesheet" /><!-- Your CSS if any --><!-- Pricing Section -->
+<link href="styles.css" rel="stylesheet" /><!-- Your CSS if any -->
+<!-- Pricing Section -->
+<section id="pricing">
+<div class="container">
+
+<!-- Pricing Section -->
 <section id="pricing">
 <div class="container">
 
@@ -899,7 +904,7 @@ height: 30px;
   const stripe = Stripe('pk_live_51RKOUmJQUSWuYFVL1Q2LZ31JSiPBSeStQtsmH7HyCrrMTZ1v3ZDONpDwDz2YzDcHLTjLMrca5sn9tA85uX7OGtOQ00SqzjPIDs');
 
   function subscribe(priceId) {
-fetch(`${process.env.REACT_APP_BACKEND_URL}/create-checkout-session`, {
+fetch('https://stripe-backend-0tik.onrender.com/create-checkout-session', {
 
       method: 'POST',
       headers: {
@@ -923,7 +928,6 @@ fetch(`${process.env.REACT_APP_BACKEND_URL}/create-checkout-session`, {
   }
 </script>
 
-<p></p>
 
 <section id="testimonials">
 <div class="container">

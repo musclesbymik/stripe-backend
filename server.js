@@ -3,16 +3,28 @@ require('dotenv').config();
 
 const express = require('express');
 const path = require('path');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Now it has access to the key
+const cors = require('cors');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-// Set up express app
 const app = express();
-app.use(express.json()); // Middleware to parse JSON requests
-app.use(express.static('public')); // Serve static files (like success.html, cancel.html)
 
-// Create checkout session route
+// ✅ Allow CORS for your frontend (same domain in this case)
+app.use(cors({
+  origin: 'https://musclesbymik.com',
+}));
+
+// ✅ Parse incoming JSON and serve static files (success.html, cancel.html)
+app.use(express.json());
+app.use(express.static('public'));
+
+// ✅ Create Stripe Checkout session route
 app.post('/create-checkout-session', async (req, res) => {
   const { priceId } = req.body;
+
+  // Validate input
+  if (!priceId || typeof priceId !== 'string') {
+    return res.status(400).json({ error: 'Invalid price ID' });
+  }
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -28,14 +40,15 @@ app.post('/create-checkout-session', async (req, res) => {
       cancel_url: `${process.env.DOMAIN}/cancel`,
     });
 
+    console.log('✅ Stripe session created:', session.id);
     res.json({ id: session.id });
   } catch (err) {
-    console.error('Error creating checkout session:', err);
+    console.error('❌ Error creating Stripe session:', err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// Success and cancel routes
+// ✅ Success and cancel routes
 app.get('/success', (req, res) => {
   res.sendFile(path.join(__dirname, 'success.html'));
 });
@@ -44,8 +57,8 @@ app.get('/cancel', (req, res) => {
   res.sendFile(path.join(__dirname, 'cancel.html'));
 });
 
-// Start server
+// ✅ Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
