@@ -1,11 +1,9 @@
-// Required dependencies
+// Load environment variables FIRST
+require('dotenv').config();
+
 const express = require('express');
 const path = require('path');
-const dotenv = require('dotenv');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
-// Load environment variables
-dotenv.config();
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY); // Now it has access to the key
 
 // Set up express app
 const app = express();
@@ -37,19 +35,17 @@ app.post('/create-checkout-session', async (req, res) => {
   }
 });
 
-// Success and Cancel pages
+// Success and cancel routes
 app.get('/success', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'success.html'));
+  res.sendFile(path.join(__dirname, 'success.html'));
 });
 
 app.get('/cancel', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'cancel.html'));
+  res.sendFile(path.join(__dirname, 'cancel.html'));
 });
 
-// Listen on defined port (use environment variable or default to 3000)
+// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-
