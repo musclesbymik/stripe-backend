@@ -8,7 +8,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 
-// ✅ Allow CORS for your frontend (same domain in this case)
+// ✅ Allow CORS from your frontend domain
 app.use(cors({
   origin: 'https://musclesbymik.com',
 }));
@@ -21,7 +21,6 @@ app.use(express.static('public'));
 app.post('/create-checkout-session', async (req, res) => {
   const { priceId } = req.body;
 
-  // Validate input
   if (!priceId || typeof priceId !== 'string') {
     return res.status(400).json({ error: 'Invalid price ID' });
   }
